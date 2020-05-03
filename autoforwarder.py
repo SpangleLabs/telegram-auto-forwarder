@@ -73,7 +73,7 @@ async def on_new_message(
 ):
     for forwarder in forwarders:
         if message.chat_id == forwarder.source.id:
-            await client.forward_messages(forwarder.destination, [message], forwarder.source)
+            await client.forward_messages(forwarder.destination, message.id, forwarder.source)
             forwarder.latest_id = message.id
     save_forwarders(forwarders)
 
