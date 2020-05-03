@@ -30,7 +30,7 @@ def read_forwarders(client):
             forwarder = Forwarder(
                 source_entity,
                 destination_entity,
-                -1
+                forwarder_data.get("latest_id", -1)
             )
             forwarders.append(forwarder)
     return forwarders
