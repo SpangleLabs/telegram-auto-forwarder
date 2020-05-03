@@ -58,8 +58,7 @@ async def forward_messages(client: telethon.TelegramClient, forwarders: List[For
         await client.forward_messages(forwarder.destination, messages_to_forward[::-1], forwarder.source)
         forwarder.latest_id = messages_to_forward[-1].id
 
-    catchup_forwarders = asyncio.gather(forward_backlog(client, forwarder) for forwarder in forwarders)
-    client.loop.run_until_complete(catchup_forwarders)
+    await asyncio.gather(forward_backlog(client, forwarder) for forwarder in forwarders)
     save_forwarders(forwarders)
 
 
