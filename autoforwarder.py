@@ -20,13 +20,13 @@ def connect():
     return client
 
 
-def read_forwarders(client):
+async def read_forwarders(client):
     forwarders = []
     with open("forwarders.json", "r") as f:
         all_data = json.load(f)
         for forwarder_data in all_data["forwards"]:
-            source_entity = client.get_entity(forwarder_data["source"])
-            destination_entity = client.get_entity(forwarder_data["destination"])
+            source_entity = await client.get_entity(forwarder_data["source"])
+            destination_entity = await client.get_entity(forwarder_data["destination"])
             forwarder = Forwarder(
                 source_entity,
                 destination_entity,
@@ -72,13 +72,17 @@ async def on_new_message(
     save_forwarders(forwarders)
 
 
+def sync(client, coro):
+    return client.loop.run_until_complete(coro)
+
+
 if __name__ == "__main__":
     print("Connecting to telegram")
     client = connect()
     print("Reading forwarders")
-    forwarders = read_forwarders(client)
+    forwarders = sync(client, read_forwarders(client))
     print("Catching up forwarders")
-    client.loop.run_until_complete(forward_messages(client, forwarders))
+    sync(client, forward_messages(client, forwarders))
     print("Tracking further updates")
     client.add_event_handler(lambda message: on_new_message(client, forwarders, message), events.NewMessage())
     client.run_until_disconnected()
