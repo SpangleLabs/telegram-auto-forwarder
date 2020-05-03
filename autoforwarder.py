@@ -61,7 +61,8 @@ async def forward_messages(client: telethon.TelegramClient, forwarders: List[For
             if message.id > forwarder.latest_id:
                 messages_to_forward.append(message)
         await client.forward_messages(forwarder.destination, messages_to_forward[::-1], forwarder.source)
-        forwarder.latest_id = messages_to_forward[0].id
+        if len(messages_to_forward) > 0:
+            forwarder.latest_id = messages_to_forward[0].id
     save_forwarders(forwarders)
 
 
