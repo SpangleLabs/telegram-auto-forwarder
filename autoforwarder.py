@@ -51,7 +51,7 @@ def save_forwarders(forwarders):
         }
         data["forwards"].append(forward_data)
     with open("forwarders.json", "w") as f:
-        json.dump(data, f)
+        json.dump(data, f, indent=2)
 
 
 async def forward_messages(client: telethon.TelegramClient, forwarders: List[Forwarder]):
