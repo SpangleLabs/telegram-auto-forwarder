@@ -1,15 +1,20 @@
-import asyncio
 import json
-from typing import NamedTuple, List
+from typing import List
 
 import telethon
 from telethon import events, hints
 
 
-class Forwarder(NamedTuple):
-    source: hints.Entity
-    destination: hints.Entity
-    latest_id: int
+class Forwarder:
+    def __init__(
+            self,
+            source: hints.Entity,
+            destination: hints.Entity,
+            latest_id: int
+    ):
+        self.source = source
+        self.destination = destination
+        self.latest_id = latest_id
 
 
 def connect():
